@@ -55,6 +55,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEW_STUDY_RECORD_APP_9F479 }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEGITAL_MEISHI_APP_A2A9C }}
           channelId: live
           projectId: new-study-record-app-9f479
