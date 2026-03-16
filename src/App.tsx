@@ -1,6 +1,6 @@
-import { Box, Button, Field, Flex, Heading, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Box, Button, Field, Flex, Heading, Input } from "@chakra-ui/react";
 
 function App() {
   const [id, setId] = useState("");
@@ -27,8 +27,8 @@ function App() {
             </Button>
           </Field.Root>
         </Box>
-        <Link to="/">
-          <Box mt={3} fontSize="sm" color="gray.700">
+        <Link to="/cards:${id}">
+          <Box mt={3} fontSize="sm">
             新規登録はこちら
           </Box>
         </Link>
