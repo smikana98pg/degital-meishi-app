@@ -1,6 +1,11 @@
 import "@testing-library/jest-dom";
 // .envファイルの環境変数を読み込む
 import { config } from "dotenv";
+// jsdom環境にはTextEncoder/TextDecoderが存在しないためNode.jsのものを補完する
+// react-routerが内部で使用するため必要
+import { TextEncoder, TextDecoder } from "util";
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 // dotenvで.envファイルを読み込む。quiet: trueでログ出力を抑制する
 config({ quiet: true });
