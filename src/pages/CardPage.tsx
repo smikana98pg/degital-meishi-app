@@ -15,7 +15,6 @@ export default function CardPage() {
       try {
         const userData = await getUserData(id);
         setUser(userData);
-        console.log(userData);
       } finally {
         setIsLoading(false);
       }
