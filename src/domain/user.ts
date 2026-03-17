@@ -1,20 +1,22 @@
 export class User {
   readonly user_id: string;
   readonly name: string;
-  readonly description: number;
+  readonly description: string;
   readonly github_id: string;
   readonly qiita_id: string;
   readonly x_id: string;
   readonly created_at: string;
+  readonly skills: string[];
 
   constructor(
     user_id: string,
     name: string,
-    description: number,
+    description: string,
     github_id: string,
     qiita_id: string,
     x_id: string,
     created_at: string,
+    skills: string[],
   ) {
     this.user_id = user_id;
     this.name = name;
@@ -23,16 +25,18 @@ export class User {
     this.qiita_id = qiita_id;
     this.x_id = x_id;
     this.created_at = created_at;
+    this.skills = skills;
   }
 
   public static newUser(
     user_id: string,
     name: string,
-    description: number,
+    description: string,
     github_id: string,
     qiita_id: string,
     x_id: string,
     created_at: string,
+    skills: string[],
   ): User {
     return new User(
       user_id,
@@ -42,6 +46,7 @@ export class User {
       formatQiita(qiita_id),
       formatX(x_id),
       formatDate(created_at),
+      skills
     );
   }
 }
