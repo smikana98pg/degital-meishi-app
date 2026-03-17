@@ -16,12 +16,12 @@ export function UserCard({ user }: Props) {
       <Box textAlign="center" w="320px">
         <Card.Root bg="white" rounded="lg" shadow="md">
           <Card.Header>
-            <Card.Title>{user?.name}</Card.Title>
+            <Card.Title fontSize="3xl">{user?.name}</Card.Title>
           </Card.Header>
           <Card.Body>
-            <Card.Title fontSize="16px">自己紹介</Card.Title>
+            <Card.Title fontSize="md">自己紹介</Card.Title>
             <Card.Description>{user?.description}</Card.Description>
-            <Card.Title fontSize="16px">好きな技術</Card.Title>
+            <Card.Title fontSize="md">好きな技術</Card.Title>
             <Card.Description>{user?.skills.join(", ")}</Card.Description>
           </Card.Body>
           <Card.Footer>

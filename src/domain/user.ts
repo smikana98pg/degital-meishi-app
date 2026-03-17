@@ -56,11 +56,11 @@ function formatDate(dateString: string): string {
 }
 
 function formatGithub(github_id: string): string {
-  return `https://github.com/${github_id}`;
+  return github_id ? `https://github.com/${github_id}` : "";
 }
 function formatQiita(qiita_id: string): string {
-  return `https://qiita.com/${qiita_id}`;
+  return qiita_id ? `https://qiita.com/${qiita_id}` : "";
 }
 function formatX(x_id: string): string {
-  return `https://x.com/${x_id}`;
+  return x_id ? `https://x.com/${x_id}` : "";
 }
