@@ -6,6 +6,14 @@ import { screen } from "@testing-library/react";
 // AppはuseNavigateを使うためRouterコンテキストが必要
 import { MemoryRouter } from "react-router";
 import { render } from "./test-utils";
+
+// Navigatorモック準備
+const mockedNavigator = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockedNavigator,
+}));
+
 // describe: テストをグループ化する
 describe("App", () => {
   // test: 個別のテストケースを定義する
