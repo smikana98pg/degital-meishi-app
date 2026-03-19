@@ -8,11 +8,11 @@ import { MemoryRouter } from "react-router";
 import { render } from "./test-utils";
 
 // Navigatorモック準備
-const mockedNavigator = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockedNavigator,
-}));
+// const mockedNavigator = jest.fn();
+// jest.mock("react-router-dom", () => ({
+//   ...jest.requireActual("react-router-dom"),
+//   useNavigate: () => mockedNavigator,
+// }));
 
 // describe: テストをグループ化する
 describe("App", () => {
