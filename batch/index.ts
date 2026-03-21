@@ -3,9 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// バッチ処理はRLSを無視する service role key を使用する（anon keyでは削除権限がない）
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL!,
-  process.env.VITE_SUPABASE_ANON_KEY!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
 // JST（UTC+9）で「昨日」の開始・終了をUTCに変換して取得する
