@@ -1,74 +1,100 @@
-# React + TypeScript + Vite
+# デジタル名刺アプリ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+IDを入力して名刺を検索・表示・登録できるWebアプリです。
 
-Currently, two official plugins are available:
+## デモ
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+https://degital-meishi-app-a2a9c.web.app/
 
-## React Compiler
+## 機能
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 名刺検索：IDを入力して名刺を表示
+- 名刺表示：名前・自己紹介・スキル・SNSアイコンを表示
+- 名刺登録：フォームから新規登録
 
-## Expanding the ESLint configuration
+## 技術スタック
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| カテゴリ | 技術 |
+|---|---|
+| フロントエンド | React 19 + TypeScript + Vite |
+| UI | Chakra UI v3 |
+| ルーティング | React Router v7 |
+| フォーム | React Hook Form |
+| データベース | Supabase |
+| ホスティング | Firebase Hosting |
+| テスト | Jest + Testing Library |
+| CI/CD | GitHub Actions |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ディレクトリ構成
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── domain/       # 型定義（User, Skill）
+├── repositories/ # DB操作（Supabase）
+├── pages/        # ルートページ（データ取得担当）
+├── components/   # UIコンポーネント（表示担当）
+└── utils/        # Supabase クライアント設定
+batch/
+└── index.ts      # 前日データ削除バッチ
+.github/workflows/
+├── firebase-hosting-merge.yml       # mainマージ時にデプロイ
+├── firebase-hosting-pull-request.yml # PR時にプレビューデプロイ
+└── batch.yml                        # 毎朝6時に前日データ削除
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## セットアップ
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 必要な環境変数
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+`.env` ファイルをプロジェクトルートに作成してください。
+
 ```
-# degital-meishi-app
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### インストール・起動
+
+```bash
+npm install
+npm run dev
+```
+
+### テスト実行
+
+```bash
+npm test
+```
+
+### バッチ手動実行
+
+前日に登録されたユーザーデータを削除します。
+
+```bash
+npx tsx ./batch/index.ts
+```
+
+## GitHub Actions
+
+### デプロイ
+
+`main` ブランチへのマージ時に Firebase Hosting へ自動デプロイされます。
+
+必要な GitHub Secrets：
+
+| Secret名 | 説明 |
+|---|---|
+| `FIREBASE_SERVICE_ACCOUNT_DEGITAL_MEISHI_APP_A2A9C` | Firebase サービスアカウントキー |
+| `VITE_SUPABASE_URL` | Supabase の URL |
+| `VITE_SUPABASE_ANON_KEY` | Supabase の匿名キー |
+
+### バッチ（毎朝6時 JST）
+
+前日に登録されたユーザーとスキル情報を自動削除します。
+
+必要な GitHub Secrets：
+
+| Secret名 | 説明 |
+|---|---|
+| `VITE_SUPABASE_URL` | Supabase の URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase のサービスロールキー |
