@@ -1,4 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // バッチ処理はRLSを無視する service role key を使用する（anon keyでは削除権限がない）
 const supabase = createClient(
