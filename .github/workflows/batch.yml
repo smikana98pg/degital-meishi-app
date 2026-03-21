@@ -1,29 +1,17 @@
-name: Daily Cleanup Batch
-
+name: Execute batch job at every 6:00 AM asia/tokyo
 on:
   schedule:
-    # 毎朝6:00 JST（= 21:00 UTC 前日）に実行
     - cron: "0 21 * * *"
-  workflow_dispatch: # 手動実行も可能にする
-
+  workflow_dispatch:
 jobs:
-  cleanup:
+  batch:
     runs-on: ubuntu-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
+      VITE_SUPABASE_URL: ${{secrets.SUPABASE_URL}}
+      VITE_SUPABASE_ANON_KEY: ${{secrets.SUPABASE_ANON_KEY}}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Run cleanup batch
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npx tsx ./batch/index.ts
+      - name: Execute batch
+        run: npx tsx -r dotenv/config ./batch/index.ts
