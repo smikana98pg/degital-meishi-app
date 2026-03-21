@@ -1,6 +1,6 @@
 // dotenv/config を最初に import することで、他のモジュールより先に .env が読み込まれる
 import "dotenv/config";
-import { supabase } from "./supabase";
+import { supabase } from "../src/utils/supabase";
 
 // 前日作成したusersとuser_skillを削除する
 const deleteUser = async () => {
