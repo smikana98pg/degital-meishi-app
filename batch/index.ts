@@ -19,6 +19,7 @@ async function deleteData() {
   // anon keyでも実行可能で、日付計算・削除処理はDB側で完結する
   const { error } = await supabase.rpc(
     "delete_users_and_user_skill_of_previous_day",
+    {},
   );
 
   if (error) {
