@@ -70,11 +70,20 @@ export async function insertUserData(
 // user_skillテーブル登録処理
 export async function insertUserSkillData(
   user_id: string,
-  skill_id: number,
+  skill_ids: number[],
 ): Promise<void> {
-  const { error } = await supabase
-    .from("user_skill")
-    .insert([{ user_id, skill_id }]);
+  const rows = skill_ids.map((skill_id) => ({ user_id, skill_id }));
+  const { error } = await supabase.from("user_skill").insert(rows);
 
   if (error) throw error;
+}
+
+// IDの重複チェック
+export async function checkUserIdExists(user_id: string): Promise<boolean> {
+  const { data } = await supabase
+    .from("users")
+    .select("user_id")
+    .eq("user_id", user_id)
+    .maybeSingle();
+  return data !== null;
 }
