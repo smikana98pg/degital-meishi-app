@@ -15,15 +15,35 @@ const deleteUser = async () => {
 };
 
 async function deleteData() {
-  // SECURITY DEFINER で定義したDB関数をRPC経由で呼び出す
-  // anon keyでも実行可能で、日付計算・削除処理はDB側で完結する
-  const { error } = await supabase.rpc(
-    "delete_users_and_user_skill_of_previous_day",
-    {},
+  // JSTで「今日の0時」をUTC換算し、それより前に作成されたデータを削除する
+  const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+  const nowJST = new Date(Date.now() + JST_OFFSET_MS);
+  const todayJSTStartUTC = new Date(
+    Date.UTC(
+      nowJST.getUTCFullYear(),
+      nowJST.getUTCMonth(),
+      nowJST.getUTCDate(),
+    ).valueOf() - JST_OFFSET_MS,
   );
 
-  if (error) {
-    throw new Error(error.message);
+  // user_skillを先に削除（外部キー制約のため）
+  const { error: skillError } = await supabase
+    .from("user_skill")
+    .delete()
+    .lt("created_at", todayJSTStartUTC.toISOString());
+
+  if (skillError) {
+    throw new Error(skillError.message);
+  }
+
+  // usersを削除
+  const { error: userError } = await supabase
+    .from("users")
+    .delete()
+    .lt("created_at", todayJSTStartUTC.toISOString());
+
+  if (userError) {
+    throw new Error(userError.message);
   }
 }
 
