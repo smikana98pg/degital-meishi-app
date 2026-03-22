@@ -15,11 +15,43 @@ jest.mock("react-router", () => ({
 const mockGetSkillsData = jest.fn();
 const mockInsertUserData = jest.fn();
 const mockInsertUserSkillData = jest.fn();
+const mockCheckUserIdExists = jest.fn();
 
 jest.mock("@/repositories/user", () => ({
   getSkillsData: () => mockGetSkillsData(),
   insertUserData: (...args: unknown[]) => mockInsertUserData(...args),
   insertUserSkillData: (...args: unknown[]) => mockInsertUserSkillData(...args),
+  checkUserIdExists: (...args: unknown[]) => mockCheckUserIdExists(...args),
+}));
+
+// ReactSelectをネイティブのselectとしてモック（テスト環境用）
+jest.mock("react-select", () => ({
+  __esModule: true,
+  default: ({ options, onChange, value, placeholder }: {
+    options: { label: string; value: number }[];
+    onChange: (selected: { label: string; value: number }[]) => void;
+    value: { label: string; value: number }[];
+    placeholder: string;
+  }) => (
+    <select
+      multiple
+      aria-label={placeholder}
+      value={value?.map((v) => String(v.value)) ?? []}
+      onChange={(e) => {
+        const selected = Array.from(e.target.selectedOptions).map((opt) => ({
+          label: opt.text,
+          value: Number(opt.value),
+        }));
+        onChange(selected);
+      }}
+    >
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
+  ),
 }));
 
 beforeEach(() => {
@@ -27,6 +59,7 @@ beforeEach(() => {
   mockGetSkillsData.mockResolvedValue([{ id: 1, name: "React" }]);
   mockInsertUserData.mockResolvedValue(undefined);
   mockInsertUserSkillData.mockResolvedValue(undefined);
+  mockCheckUserIdExists.mockResolvedValue(false);
 });
 
 describe("名刺登録ページ", () => {
@@ -69,7 +102,7 @@ describe("名刺登録ページ", () => {
     await waitFor(() => {
       expect(screen.getByRole("option", { name: "React" })).toBeInTheDocument();
     });
-    await user.selectOptions(screen.getByRole("combobox"), "1");
+    await user.selectOptions(screen.getByRole("listbox"), "1");
 
     await user.click(screen.getByRole("button", { name: "登録" }));
 
@@ -156,7 +189,7 @@ describe("名刺登録ページ", () => {
     await waitFor(() => {
       expect(screen.getByRole("option", { name: "React" })).toBeInTheDocument();
     });
-    await user.selectOptions(screen.getByRole("combobox"), "1");
+    await user.selectOptions(screen.getByRole("listbox"), "1");
 
     await user.click(screen.getByRole("button", { name: "登録" }));
 
